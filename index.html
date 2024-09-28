@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xhesfashion FE</title>
-    <link rel="stylesheet" type="text/css" href="https://github.com/JohnnyJavaScript/xhesfashion1/blob/9ab1ea96cb2655905de57fa124f0dfbd773cae84/Picsart_24-09-28_21-46-57-039.ico">
+    <link rel="icon" href="xhesfashion1/Picsart_24-09-28_21-46-57-039.ico"> <!-- Corrected favicon link -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,7 +63,6 @@
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
 
-        // Remove previous event listener and ensure it only attaches once
         let downloadHandlerAdded = false;
 
         document.getElementById('upload').addEventListener('change', function(event) {
@@ -121,9 +120,11 @@
                 // Ensure download button event handler is only added once
                 if (!downloadHandlerAdded) {
                     downloadBtn.addEventListener('click', function() {
+                        const timestamp = new Date().toISOString().replace(/[-:.]/g, ""); // Create a timestamp
+                        const fileName = `MiraEdi_Fashion_${timestamp}.png`; // Name the file with a timestamp
                         const link = document.createElement('a');
                         link.href = canvas.toDataURL('image/png');
-                        link.download = 'edited_image.png';
+                        link.download = fileName; // Use the generated file name
                         link.click();
                     });
                     downloadHandlerAdded = true;
