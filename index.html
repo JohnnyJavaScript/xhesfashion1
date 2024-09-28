@@ -51,19 +51,24 @@
 <body>
 
     <div class="container">
-        <h1>Përzgjidh foton tënde</h1>
+        <h1>Upload your photo</h1>
         <input type="file" id="upload" accept="image/*" />
         <canvas id="canvas"></canvas>
         <button id="downloadBtn">Download Edited Image</button>
     </div>
 
     <script>
+        const downloadBtn = document.getElementById('downloadBtn');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Remove previous event listener and ensure it only attaches once
+        let downloadHandlerAdded = false;
+
         document.getElementById('upload').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (!file) return;
 
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
             const img = new Image();
 
             img.onload = function() {
@@ -110,16 +115,18 @@
                 ctx.fillText(text, x, y);
 
                 // Show the download button
-                const downloadBtn = document.getElementById('downloadBtn');
                 downloadBtn.style.display = 'block';
 
-                // When download button is clicked, trigger download
-                downloadBtn.addEventListener('click', function() {
-                    const link = document.createElement('a');
-                    link.href = canvas.toDataURL('image/png');
-                    link.download = 'edited_image.png';
-                    link.click();
-                });
+                // Ensure download button event handler is only added once
+                if (!downloadHandlerAdded) {
+                    downloadBtn.addEventListener('click', function() {
+                        const link = document.createElement('a');
+                        link.href = canvas.toDataURL('image/png');
+                        link.download = 'edited_image.png';
+                        link.click();
+                    });
+                    downloadHandlerAdded = true;
+                }
             };
 
             img.src = URL.createObjectURL(file);
